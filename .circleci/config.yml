@@ -23,9 +23,12 @@ jobs:
                   "type": "plain_text",
                   "text": "*This is a text notification",
                   "emoji":true
-                }]
-              }]
+                }
+                ]
+              }
+              ]
             }
+            event: always
   build-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -144,7 +147,7 @@ workflows:
   send-notification:
     jobs:
       - notify: 
-          context: slack
+          context: Slack
   default:
     jobs:
       - build-frontend
@@ -154,7 +157,7 @@ workflows:
           requires:
             - build-frontend
       - test-backend:
-          context: slack
+          context: Slack
           requires:
             - build-backend
       - scan-frontend:
