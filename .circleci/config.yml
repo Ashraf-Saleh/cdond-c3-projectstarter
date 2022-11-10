@@ -27,7 +27,7 @@ jobs:
           command: |
             cd backend
             npm install
-            npm rund build
+            npm run build
 
 workflows:
   default:
