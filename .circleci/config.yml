@@ -141,6 +141,10 @@ jobs:
 
 
 workflows:
+  send-notification:
+    jobs:
+      - notify: 
+          context: slack
   default:
     jobs:
       - build-frontend
