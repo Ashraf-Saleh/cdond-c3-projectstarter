@@ -160,7 +160,11 @@ jobs:
           command: |
             aws ec2 describe-instances \
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
-            --output text >> project/.circleci/ansible/inventory.txt
+            --output text >> .circleci/ansible/inventory.txt
+      - run:
+          name: read the inventory.txt
+          command: |
+            cat .circleci/ansible/inventory.txt
       - run:
           name: Install tar utility 
           command: |
@@ -185,7 +189,7 @@ jobs:
       - run: 
           name: Configure server
           command: |
-            ansible-playbook -i project/.circleci/ansible/inventory.txt .circleci/ansible/configure-server.yml
+            ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/configure-server.yml
 
 
 
