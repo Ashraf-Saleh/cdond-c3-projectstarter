@@ -219,7 +219,7 @@ jobs:
           name: Run migrations
           command: |
               cd backend
-              npm update
+              npm cache clean --force
               npm install
               npm run build
               npm audit fix --force
