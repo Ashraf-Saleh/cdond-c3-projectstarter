@@ -214,16 +214,18 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys: [backend-cache]
+          keys: [backend-build]
       - run:
           name: Run migrations
           command: |
               cd backend
-              npm cache clean --force
               npm install
               npm run build
-              npm audit fix --force
-              npm run migrations > migrations_dump.txt
+      #        npm cache clean --force
+              
+      #        npm run build
+      #        npm audit fix --force
+      #        npm run migrations > migrations_dump.txt
       - run:
           name: Send migration status to kvdb.io OR memstash.io
           command: |   
@@ -236,7 +238,7 @@ jobs:
               fi
       - save_cache:
           paths: [backend/node_modules]
-          key: backend-cache
+          key: backend-build
   deploy-frontend:
     docker:
       - image: amazon/aws-cli
