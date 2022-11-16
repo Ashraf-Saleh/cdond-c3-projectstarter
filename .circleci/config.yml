@@ -219,6 +219,7 @@ jobs:
           name: Run migrations
           command: |
               cd backend
+              npm update
               npm install
               npm run build
               npm audit fix --force
@@ -305,22 +306,22 @@ workflows:
     jobs:
       - build-frontend
       - build-backend
-      - test-frontend:
-          context: Slack
-          requires:
-            - build-frontend
-      - test-backend:
-          context: Slack
-          requires:
-            - build-backend
-      - scan-frontend:
-          requires:
-            - build-frontend
-      - scan-backend:
-          requires:
-            - build-backend
-      - deploy-infrastructure:
-          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+      # - test-frontend:
+      #     context: Slack
+      #     requires:
+      #       - build-frontend
+      # - test-backend:
+      #     context: Slack
+      #     requires:
+      #       - build-backend
+      # - scan-frontend:
+      #     requires:
+      #       - build-frontend
+      # - scan-backend:
+      #     requires:
+      #       - build-backend
+      - deploy-infrastructure
+      #    requires: [test-frontend, test-backend, scan-frontend, scan-backend]
           # filters:
           #   branches:
           #     only: [test-feature-branch]
@@ -329,10 +330,10 @@ workflows:
             - deploy-infrastructure
       - run-migrations:
           requires: [configure-infrastructure]
-      - deploy-frontend:
-          requires: [run-migrations]
-      - deploy-backend:
-          requires: [run-migrations]
+      # - deploy-frontend:
+      #     requires: [run-migrations]
+      # - deploy-backend:
+      #     requires: [run-migrations]
 
       
   
