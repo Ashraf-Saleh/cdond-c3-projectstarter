@@ -29,8 +29,8 @@ commands:
           
           command: |
             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-            SUCCESS = $(curl --insecure https://kvdb.io/sSWVubEaQsisAAYcLgvBu/migration_<<parameters.workflow_id>>)
-            if(sucess_migrations == 1); 
+            SUCCESS = $(curl --insecure https://kvdb.io/U62dYFMrxCxVdrWqxdymd9/migration_<<parameters.workflow_id>>)
+            if(SUCCESS == 1); 
             then
               cd ~/project/backend
               npm install
@@ -255,7 +255,7 @@ jobs:
               if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
               then
                   # If you are using kvdb.io, generate the bucket ID "9GE4jRtKznmVKRfvdBABBe" in your local terminal first
-                  curl https://kvdb.io/sSWVubEaQsisAAYcLgvBu/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
+                  curl --insecure https://kvdb.io/U62dYFMrxCxVdrWqxdymd9/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
               fi
       - save_cache:
           paths: [backend/node_modules]
