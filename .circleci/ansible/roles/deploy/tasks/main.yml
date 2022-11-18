@@ -11,6 +11,8 @@
     state: latest
     update_cache: yes
 
+
+
 - name: "install pm2"
   become: true
   npm:
@@ -18,3 +20,16 @@
     global: yes
     production: yes
     state: present
+
+- name: "Extract artifact"
+  unarchive:
+    src: ~/project/artifact.tar.gz
+    dest: /home/ubuntu
+
+- name: "Install NPM"
+  command: 
+    cmd: npm install
+
+- name: "Start application"
+  command: 
+    cmd: pm2 start npm -- start
