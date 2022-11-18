@@ -29,7 +29,7 @@ commands:
           
           command: |
             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-            SUCCESS = $(curl --insecure https://kvdb.io/U62dYFMrxCxVdrWqxdymd9/migration_<<parameters.workflow_id>>)
+            SUCCESS=$(curl --insecure https://kvdb.io/U62dYFMrxCxVdrWqxdymd9/migration_<<parameters.workflow_id>>)
             if(SUCCESS == 1); 
             then
               cd ~/project/backend
@@ -267,14 +267,16 @@ jobs:
 
   deploy-frontend:
     docker:
-      - image: amazon/aws-cli
+      - image: amazon/node:13.8.0
     steps:
       - checkout
+      - attach_workspace:
+          at: ~/
       - run:
           name: Install dependencies
           command: |
-            yum -y install nodejs
-            yum -y install tar gzip
+            sudo apt-get update
+            sudo apt -y install awscli
       - run:
           name: Get backend url
           command: |
