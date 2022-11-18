@@ -5,7 +5,7 @@ orbs:
 
 commands:
   destory_environment:
-    Parameters:
+    parameters:
        workflow_id:
           type: string
     steps:
@@ -20,7 +20,7 @@ commands:
 
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
-    Parameters:
+    parameters:
         workflow_id: 
             type: string    
     steps:
