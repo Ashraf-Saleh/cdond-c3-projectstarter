@@ -273,15 +273,15 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            sudo apt update
-            sudo apt install python3
-            sudo apt install ansible
-            sudo apt install nodejs npm
-            sudo apt install awscli
+            yum -y install nodejs
+            yum -y install tar gzip
       - run:
           name: Get backend url
           command: |
-            export BACKEND_IP=$(aws ec2 describe-instances...............)
+            export BACKEND_IP=$(aws ec2 describe-instances \
+            --filters Name=tag:Name,Values="backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+            --query 'Reservations[*].Instances[*].PublicIpAddress' \
+            --output text)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "API_URL = ${API_URL}"
             echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
@@ -313,8 +313,8 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apk add --update ansible
-            yum install -y tar gzip nodejs npm 
+            apk add --update tar gzip nodejs npm ansible
+            pip install awscli
              
       - run:
           name: Deploy backend
@@ -364,10 +364,10 @@ workflows:
             - deploy-infrastructure
       - run-migrations:
           requires: [configure-infrastructure]
-      # - deploy-frontend:
-      #     requires: [run-migrations]
-      # - deploy-backend:
-      #     requires: [run-migrations]
+      - deploy-frontend:
+          requires: [run-migrations]
+      - deploy-backend:
+          requires: [run-migrations]
 
       
   
