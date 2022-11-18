@@ -20,11 +20,20 @@
     global: yes
     production: yes
     state: present
+- name: "Create directory"
+  file:
+    path: /home/ubuntu/udapeople
+    state: directory
 
-- name: "Extract artifact"
+- name: "copy artifact"
   unarchive:
     src: ~/project/artifact.tar.gz
-    dest: /home/ubuntu
+    dest: /home/ubuntu/udapeople
+- name: "Uncompress artifact"
+  shell: |
+    cd /home/ubuntu/udapeople
+    tar xvzf artifact.tar.gz -C
+    ls -la
 
 - name: "Install NPM"
   command: 
@@ -33,3 +42,5 @@
 - name: "Start application"
   command: 
     cmd: pm2 start npm -- start
+  args:
+    chdir: /home/ubuntu/udapeople
