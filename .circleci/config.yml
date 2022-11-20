@@ -344,7 +344,8 @@ jobs:
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
             export  ANSIBLE_HOST_KEY_CHECKING=false
-            ansible-playbook -i inventory.txt deploy-backend.yml
+            chmod 400 Public_Key.pem
+            ansible-playbook -i inventory.txt deploy-backend.yml --private-key Public_Key.pem 
       - destroy_environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
       - revert-migrations:
