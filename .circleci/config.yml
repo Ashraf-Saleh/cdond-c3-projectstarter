@@ -1,6 +1,41 @@
 version: 2.1
 
+orbs:
+  slack: circleci/slack@4.10.1
+
 commands:
+  destroy_environment:
+    parameters:
+       workflow_id:
+          type: string
+    steps:
+      - run:
+          name: Destroy environments
+          when: on_fail
+          command: |
+            echo "Destroying environment: <<parameters.workflow_id>>"
+            aws cloudformation delete-stack --stack-name  udapeople-backend-<<parameters.workflow_id>>
+            aws cloudformation delete-stack --stack-name  udapeople-frontend-<<parameters.workflow_id>>
+            aws s3 rb s3://udapeople-<<parameters.workflow_id>> --force
+  revert-migrations:
+    description: Revert the last migration if successfully run in the current workflow.
+    parameters:
+        workflow_id: 
+            type: string    
+    steps:
+      - run:
+          name: Revert migrations
+          
+          command: |
+            # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
+            SUCCESS=$(curl --insecure https://kvdb.io/U62dYFMrxCxVdrWqxdymd9/migration_<<parameters.workflow_id>>)
+            if(SUCCESS == 1); 
+            then
+              cd ~/project/backend
+              npm install
+              npm run migration:revert
+            fi
+          when: on_fail
 
 
 
@@ -138,7 +173,6 @@ jobs:
             --tags project=udapeople \
             --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
             --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}" \
-
       - run:
           name: Add back-end ip to ansible inventory
           command: |
@@ -281,6 +315,9 @@ jobs:
       - checkout
       - attach_workspace:
           at: ~/
+      # Checkout code from git
+      # Add ssh keys with fingerprint
+      # attach workspace
       - add_ssh_keys:
             fingerprints: 
               - "2c:b5:db:59:b2:aa:5a:d8:29:c5:bd:e5:52:c2:13:45"
@@ -437,9 +474,9 @@ workflows:
             - build-backend
       - deploy-infrastructure:
           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-          filters:
-            branches:
-              only: [circleci-project-setup]
+            filters:
+              branches:
+                only: [circleci-project-setup]
       - configure-infrastructure:
           requires:
             - deploy-infrastructure
@@ -455,6 +492,3 @@ workflows:
           requires: [smoke-test]
       - cleanup:
           requires: [cloudfront-update]
-
-    
-  
