@@ -442,7 +442,7 @@ jobs:
             echo $OldWorkflowID
             if [[ "${CIRCLE_WORKFLOW_ID:0:7}" != "${OldWorkflowID}" ]]
             then
-              
+              echo "delete the old workflow resources"
               aws s3 ls s3://udapeople-${OldWorkflowID}/
               aws s3 rm s3://udapeople-${OldWorkflowID}/ --recursive
               aws cloudformation delete-stack --stack-name udapeople-backend-${OldWorkflowID}
@@ -474,7 +474,7 @@ workflows:
       # - scan-backend:
       #     requires:
       #       - build-backend
-      # - deploy-infrastructure
+      - deploy-infrastructure
         #  requires: [test-frontend, test-backend, scan-frontend, scan-backend]
       #     filters:
       #       branches:
@@ -490,9 +490,9 @@ workflows:
       #     requires: [run-migrations]
       # - smoke-test:
       #     requires: [deploy-backend, deploy-frontend]
-      # - cloudfront-update
+      - cloudfront-update
       #     requires: [smoke-test]
-       - cleanup
+      #  - cleanup
           # requires: [cloudfront-update]
 
       
