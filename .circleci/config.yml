@@ -474,7 +474,7 @@ workflows:
       # - scan-backend:
       #     requires:
       #       - build-backend
-      - deploy-infrastructure
+      # - deploy-infrastructure
         #  requires: [test-frontend, test-backend, scan-frontend, scan-backend]
       #     filters:
       #       branches:
@@ -490,9 +490,9 @@ workflows:
       #     requires: [run-migrations]
       # - smoke-test:
       #     requires: [deploy-backend, deploy-frontend]
-      - cloudfront-update
+      # - cloudfront-update
       #     requires: [smoke-test]
-      # - cleanup
+       - cleanup
           # requires: [cloudfront-update]
 
       
