@@ -35,9 +35,7 @@
     tar xvzf artifact.tar.gz -C
     ls -la
 
-- name: "Install NPM"
-  command: 
-    cmd: npm install
+
 
 - name: "Start application"
   become: yes
