@@ -200,21 +200,17 @@ jobs:
 
   configure-infrastructure:
     docker:
-      - image: ubuntu:latest
+      - image: python:3.7-alpine3.11
     steps:
       - checkout
       - add_ssh_keys:
-            fingerprints: 
-              - "2c:b5:db:59:b2:aa:5a:d8:29:c5:bd:e5:52:c2:13:45"
+            fingerprints:  ["2c:b5:db:59:b2:aa:5a:d8:29:c5:bd:e5:52:c2:13:45"]
       - attach_workspace:
           at: ~/
       - run:
           name: Install dependencies
           command: |
-            sudo apt-add-repository ppa:ansible/ansible
-            sudo apt update
-            sudo apt install ansible
-            pip install awscli
+            apk add --update ansible
           #  apk add --update ansible=5.8.0-r0
           #  apk add --update ansible
       - run: 
