@@ -27,7 +27,7 @@
 
 - name: "copy artifact"
   unarchive:
-    src: ~/project/artifact.tar.gz
+    src: artifact.tar.gz
     dest: /home/ubuntu/udapeople
 - name: "Uncompress artifact"
   shell: |
