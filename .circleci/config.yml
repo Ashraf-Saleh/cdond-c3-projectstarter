@@ -258,6 +258,7 @@ jobs:
               then
                   # If you are using kvdb.io, generate the bucket ID "9GE4jRtKznmVKRfvdBABBe" in your local terminal first
                   curl --insecure https://kvdb.io/U62dYFMrxCxVdrWqxdymd9/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
+                  curl --insecure https://kvdb.io/U62dYFMrxCxVdrWqxdymd9/migration_${CIRCLE_WORKFLOW_ID:0:7}
               fi
       - save_cache:
           paths: [backend/node_modules]
@@ -456,24 +457,24 @@ jobs:
 workflows:
   default:
     jobs:
-      - build-frontend
-      - build-backend
-      - test-frontend:
-          context: Slack
-          requires:
-            - build-frontend
-      - test-backend:
-          context: Slack
-          requires:
-            - build-backend
-      - scan-frontend:
-          requires:
-            - build-frontend
-      - scan-backend:
-          requires:
-            - build-backend
+      # - build-frontend
+      # - build-backend
+      # - test-frontend:
+      #     context: Slack
+      #     requires:
+      #       - build-frontend
+      # - test-backend:
+      #     context: Slack
+      #     requires:
+      #       - build-backend
+      # - scan-frontend:
+      #     requires:
+      #       - build-frontend
+      # - scan-backend:
+      #     requires:
+      #       - build-backend
       - deploy-infrastructure:
-          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+          # requires: [test-frontend, test-backend, scan-frontend, scan-backend]
           filters:
               branches:
                 only: [master]
